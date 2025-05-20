@@ -2,7 +2,7 @@
   "name": "メルカリ説明文ジェネレーター",
   "short_name": "メルカリ説明文",
   "description": "メルカリの商品説明文を簡単に自動生成できるツール",
-  "start_url": "/rakuraku-furima/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#FF0211",

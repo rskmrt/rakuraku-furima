@@ -35,12 +35,13 @@ export default defineConfig({
       }
     })
   ],
-  base: '/rakuraku-furima/',
+  base: '/',
   build: {
-    assetsInlineLimit: 0, // すべてのアセットを個別のファイルとして出力
+    assetsInlineLimit: 0,
+    outDir: 'dist',
+    emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks: undefined, // チャンク分割をシンプルに
         entryFileNames: 'assets/[name].[hash].js',
         chunkFileNames: 'assets/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash].[ext]'
