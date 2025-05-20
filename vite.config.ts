@@ -35,6 +35,7 @@ export default defineConfig({
       }
     })
   ],
+  base: '/rakuraku-furima/',
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
