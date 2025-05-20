@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Clipboard, RefreshCw, ChevronLeft } from 'lucide-react';
 import { useFormStore } from '../store/formStore';
-import { useSettingsStore } from '../store/settingsStore';
 import { generateDescription } from '../utils/api';
 
 const ResultView: React.FC = () => {
   const { productInfo, generatedText, setGeneratedText, setCurrentStep, isGenerating, setIsGenerating } = useFormStore();
-  const { settings, updateSettings } = useSettingsStore();
   const [copied, setCopied] = useState(false);
   
   const handleCopy = () => {
@@ -18,12 +16,8 @@ const ResultView: React.FC = () => {
   const handleRegenerateText = async () => {
     setIsGenerating(true);
     try {
-      const text = await generateDescription(productInfo, settings.apiKey);
+      const text = await generateDescription(productInfo);
       setGeneratedText(text);
-      
-      if (settings.autoSave) {
-        updateSettings({ lastGenerated: text });
-      }
     } catch (error) {
       console.error('生成エラー:', error);
       alert(error instanceof Error ? error.message : '説明文の生成に失敗しました');
