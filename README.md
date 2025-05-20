@@ -28,17 +28,6 @@ npm install
 yarn
 ```
 
-### 環境変数の設定
-
-1. プロジェクトのルートディレクトリに `.env` ファイルを作成
-2. 以下の環境変数を設定:
-
-```
-VITE_OPENAI_API_KEY=sk-your_openai_api_key_here
-```
-
-OpenAI API キーは[OpenAI のウェブサイト](https://platform.openai.com/api-keys)から取得できます。
-
 ### 開発サーバーの起動
 
 ```bash
