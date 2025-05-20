@@ -35,7 +35,7 @@ export default defineConfig({
       }
     })
   ],
-  base: '/',
+  base: '',
   build: {
     assetsInlineLimit: 0,
     outDir: 'dist',
