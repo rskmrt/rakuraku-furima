@@ -36,7 +36,18 @@ export default defineConfig({
     })
   ],
   base: '/rakuraku-furima/',
+  build: {
+    assetsInlineLimit: 0, // すべてのアセットを個別のファイルとして出力
+    rollupOptions: {
+      output: {
+        manualChunks: undefined, // チャンク分割をシンプルに
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]'
+      }
+    }
+  },
   optimizeDeps: {
     exclude: ['lucide-react'],
-  },
+  }
 });
