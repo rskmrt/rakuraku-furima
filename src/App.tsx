@@ -140,12 +140,7 @@ function App() {
       
       <footer className="bg-white py-4 shadow-inner mt-auto">
         <div className="max-w-5xl mx-auto px-4 text-center text-sm text-mercari-darkGray">
-          <p>
-            このツールはGPT-4.1 Nano APIを使用しており、生成のたびに少額の料金が発生します。
-          </p>
-          <p className="mt-1">
-            APIキーはブラウザのローカルストレージにのみ保存され、サーバーには送信されません。
-          </p>
+         
         </div>
       </footer>
       

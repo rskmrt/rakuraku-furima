@@ -45,7 +45,6 @@ const StepProgress: React.FC = () => {
         {steps.map((step, index) => {
           const isCompleted = index < currentIndex;
           const isCurrent = index === currentIndex;
-          const isPending = index > currentIndex;
           
           // ステップのタイトルを取得
           const getStepTitle = (step: FormStep): string => {

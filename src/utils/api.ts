@@ -1,6 +1,22 @@
 import OpenAI from 'openai';
 
-export async function generateDescription(productInfo: any, apiKey: string): Promise<string> {
+interface ProductInfo {
+  productName: string;
+  category: string;
+  brand?: string;
+  condition?: string;
+  purchaseDate?: string;
+  usageFrequency?: string;
+  size?: string;
+  color?: string;
+  accessories?: string;
+  features?: string;
+  damages?: string;
+  packaging?: string;
+  shippingMethod?: string;
+}
+
+export async function generateDescription(productInfo: ProductInfo, apiKey: string): Promise<string> {
   if (!apiKey) {
     throw new Error('APIキーが設定されていません。設定画面からAPIキーを設定してください。');
   }
@@ -45,7 +61,7 @@ export async function generateDescription(productInfo: any, apiKey: string): Pro
   }
 }
 
-function createPrompt(productInfo: any): string {
+function createPrompt(productInfo: ProductInfo): string {
   let prompt = `以下の商品情報を元に、メルカリの出品用の説明文を作成してください：\n\n`;
   
   // 必須項目
