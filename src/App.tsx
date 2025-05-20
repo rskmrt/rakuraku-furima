@@ -1,54 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import Header from './components/Header';
 import StepProgress from './components/StepProgress';
 import FormStep from './components/FormStep';
 import ResultView from './components/ResultView';
-import SettingsModal from './components/SettingsModal';
 import { useFormStore } from './store/formStore';
-import { useSettingsStore } from './store/settingsStore';
 import { generateDescription } from './utils/api';
 import { FORM_STEPS } from './types';
 
+// 環境変数からAPIキーが設定されているか確認
+const isApiKeySetInEnv = (): boolean => {
+  return !!import.meta.env.VITE_OPENAI_API_KEY;
+};
+
 function App() {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { currentStep, setCurrentStep, productInfo, setGeneratedText, setIsGenerating, generatedText } = useFormStore();
-  const { settings, updateSettings } = useSettingsStore();
+  const apiKeyFromEnv = isApiKeySetInEnv();
   
-  // API キーが設定されていない場合に通知
+  // 環境変数にAPIキーが設定されているか確認
   useEffect(() => {
-    if (!settings.apiKey) {
+    if (!apiKeyFromEnv) {
       setTimeout(() => {
-        toast.custom((t) => (
-          <div className={`${t.visible ? 'animate-slide-up' : 'animate-fade-in'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
-            <div className="flex-1 w-0 p-4">
-              <div className="flex items-start">
-                <div className="ml-3 flex-1">
-                  <p className="text-sm font-medium text-mercari-black">
-                    APIキーが設定されていません
-                  </p>
-                  <p className="mt-1 text-sm text-mercari-darkGray">
-                    説明文を生成するにはOpenAI APIキーを設定してください
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex border-l border-mercari-lightGray">
-              <button
-                onClick={() => {
-                  setIsSettingsOpen(true);
-                  toast.dismiss(t.id);
-                }}
-                className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-mercari-red hover:text-mercari-darkRed focus:outline-none"
-              >
-                設定する
-              </button>
-            </div>
-          </div>
-        ), { duration: 5000 });
+        toast.error('環境変数にAPIキーが設定されていません。詳細はREADMEを参照してください。', {
+          duration: 5000,
+        });
       }, 1000);
     }
-  }, [settings.apiKey]);
+  }, [apiKeyFromEnv]);
   
   const moveToNextStep = async () => {
     const currentIndex = FORM_STEPS.indexOf(currentStep);
@@ -63,22 +41,16 @@ function App() {
       }
       
       // APIキーが設定されているか確認
-      if (!settings.apiKey) {
-        toast.error('APIキーが設定されていません。設定画面からAPIキーを設定してください。');
-        setIsSettingsOpen(true);
+      if (!apiKeyFromEnv) {
+        toast.error('環境変数にAPIキーが設定されていません。詳細はREADMEを参照してください。');
         return;
       }
       
       // 説明文生成
       setIsGenerating(true);
       try {
-        const generatedText = await generateDescription(productInfo, settings.apiKey);
+        const generatedText = await generateDescription(productInfo);
         setGeneratedText(generatedText);
-        
-        if (settings.autoSave) {
-          updateSettings({ lastGenerated: generatedText });
-        }
-        
         return;
       } catch (error) {
         console.error('生成エラー:', error);
@@ -97,7 +69,7 @@ function App() {
   return (
     <div className="min-h-screen bg-mercari-lightGray flex flex-col">
       <Toaster position="top-center" />
-      <Header openSettings={() => setIsSettingsOpen(true)} />
+      <Header />
       
       <main className="flex-1 py-6 px-4">
         <div className="max-w-5xl mx-auto">
@@ -128,8 +100,6 @@ function App() {
          
         </div>
       </footer>
-      
-      <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
     </div>
   );
 }

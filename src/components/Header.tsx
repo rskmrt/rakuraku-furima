@@ -1,12 +1,8 @@
 import React from 'react';
-import { Settings, Tag } from 'lucide-react';
+import { Tag } from 'lucide-react';
 import { useFormStore } from '../store/formStore';
 
-interface HeaderProps {
-  openSettings: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ openSettings }) => {
+const Header: React.FC = () => {
   const resetForm = useFormStore((state) => state.resetForm);
   
   return (
@@ -22,13 +18,6 @@ const Header: React.FC<HeaderProps> = ({ openSettings }) => {
             className="text-mercari-darkGray hover:text-mercari-black transition px-2 py-1 rounded text-sm"
           >
             新規作成
-          </button>
-          <button
-            onClick={openSettings}
-            className="text-mercari-darkGray hover:text-mercari-black transition"
-            aria-label="設定"
-          >
-            <Settings className="h-5 w-5" />
           </button>
         </div>
       </div>

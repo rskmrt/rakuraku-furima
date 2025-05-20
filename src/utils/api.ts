@@ -1,13 +1,21 @@
 import OpenAI from 'openai';
 import { ProductInfo } from '../types';
 
-export async function generateDescription(productInfo: ProductInfo, apiKey: string): Promise<string> {
-  if (!apiKey) {
-    throw new Error('APIキーが設定されていません。設定画面からAPIキーを設定してください。');
+// 環境変数からAPIキーを取得する
+const getApiKey = (apiKey?: string): string => {
+  const envApiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  return apiKey || envApiKey || '';
+};
+
+export async function generateDescription(productInfo: ProductInfo, apiKey?: string): Promise<string> {
+  const effectiveApiKey = getApiKey(apiKey);
+  
+  if (!effectiveApiKey) {
+    throw new Error('APIキーが設定されていません。環境変数 VITE_OPENAI_API_KEY を設定してください。');
   }
 
   const openai = new OpenAI({
-    apiKey,
+    apiKey: effectiveApiKey,
     dangerouslyAllowBrowser: true,
   });
 

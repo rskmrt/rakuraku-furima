@@ -41,12 +41,6 @@ export const FORM_STEPS: FormStep[] = [
   'shippingMethod',
 ];
 
-export interface UserSettings {
-  apiKey: string;
-  autoSave: boolean;
-  lastGenerated: string;
-}
-
 export interface FormState {
   currentStep: FormStep;
   productInfo: ProductInfo;
@@ -57,9 +51,4 @@ export interface FormState {
   setGeneratedText: (text: string) => void;
   setIsGenerating: (isGenerating: boolean) => void;
   resetForm: () => void;
-}
-
-export interface SettingsState {
-  settings: UserSettings;
-  updateSettings: (settings: Partial<UserSettings>) => void;
 }
