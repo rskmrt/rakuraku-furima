@@ -2,13 +2,22 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/rakuraku-furima/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="メルカリの商品説明文を簡単に自動生成できるツール" />
     <meta name="theme-color" content="#FF0211" />
-    <link rel="apple-touch-icon" href="./apple-touch-icon.png" sizes="180x180">
-    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="/rakuraku-furima/apple-touch-icon.png" sizes="180x180">
+    <link rel="manifest" href="/rakuraku-furima/manifest.json">
     <title>メルカリ説明文ジェネレーター</title>
+    <script>
+      // 404ページからのリダイレクトをサポート
+      (function() {
+        if (typeof window.sessionStorage !== 'undefined') {
+          // 現在のURLをセッションストレージに保存
+          sessionStorage.redirect = location.href;
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

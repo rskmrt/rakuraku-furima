@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>リダイレクト中...</title>
+  <script>
+    // シングルページアプリケーション用のリダイレクトロジック
+    const segmentCount = 1; // GitHub Pagesのサブディレクトリ用
+    const baseUrl = '/rakuraku-furima/';
+    
+    const location = window.location;
+    const redirect = sessionStorage.redirect;
+    delete sessionStorage.redirect;
+    
+    if (redirect && redirect !== location.href) {
+      history.replaceState(null, null, redirect);
+    } else {
+      // 404時のデフォルトリダイレクト
+      history.replaceState(null, null, baseUrl);
+    }
+  </script>
+  <meta http-equiv="refresh" content="0;URL='/rakuraku-furima/'">
+</head>
+<body>
+  <p>メルカリ説明文ジェネレーターにリダイレクトします...</p>
+</body>
+</html> 
