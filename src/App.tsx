@@ -8,6 +8,7 @@ import SettingsModal from './components/SettingsModal';
 import { useFormStore } from './store/formStore';
 import { useSettingsStore } from './store/settingsStore';
 import { generateDescription } from './utils/api';
+import { FORM_STEPS } from './types';
 
 function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -50,26 +51,10 @@ function App() {
   }, [settings.apiKey]);
   
   const moveToNextStep = async () => {
-    const steps: (keyof typeof productInfo)[] = [
-      'productName',
-      'category',
-      'brand',
-      'condition',
-      'purchaseDate',
-      'usageFrequency',
-      'size',
-      'color',
-      'accessories',
-      'features',
-      'damages',
-      'packaging',
-      'shippingMethod',
-    ];
-    
-    const currentIndex = steps.indexOf(currentStep);
+    const currentIndex = FORM_STEPS.indexOf(currentStep);
     
     // 現在のステップが最後の場合、生成処理を開始
-    if (currentIndex === steps.length - 1) {
+    if (currentIndex === FORM_STEPS.length - 1) {
       // 必須項目のバリデーション
       if (!productInfo.productName || !productInfo.category) {
         toast.error('商品名とカテゴリは必須項目です');
@@ -104,8 +89,8 @@ function App() {
     }
     
     // 次のステップに進む
-    if (currentIndex < steps.length - 1) {
-      setCurrentStep(steps[currentIndex + 1]);
+    if (currentIndex < FORM_STEPS.length - 1) {
+      setCurrentStep(FORM_STEPS[currentIndex + 1]);
     }
   };
   

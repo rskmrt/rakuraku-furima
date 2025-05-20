@@ -4,17 +4,17 @@ import { FormState, ProductInfo } from '../types';
 const initialProductInfo: ProductInfo = {
   productName: '',
   category: '',
-  brand: '',
-  condition: '',
-  purchaseDate: '',
-  usageFrequency: '',
-  size: '',
-  color: '',
-  accessories: '',
-  features: '',
-  damages: '',
-  packaging: '',
-  shippingMethod: '',
+  brand: undefined,
+  condition: undefined,
+  purchaseDate: undefined,
+  usageFrequency: undefined,
+  size: undefined,
+  color: undefined,
+  accessories: undefined,
+  features: undefined,
+  damages: undefined,
+  packaging: undefined,
+  shippingMethod: undefined,
 };
 
 export const useFormStore = create<FormState>((set) => ({

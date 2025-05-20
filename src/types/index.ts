@@ -1,17 +1,17 @@
 export interface ProductInfo {
   productName: string;
   category: string;
-  brand: string;
-  condition: string;
-  purchaseDate: string;
-  usageFrequency: string;
-  size: string;
-  color: string;
-  accessories: string;
-  features: string;
-  damages: string;
-  packaging: string;
-  shippingMethod: string;
+  brand?: string;
+  condition?: string;
+  purchaseDate?: string;
+  usageFrequency?: string;
+  size?: string;
+  color?: string;
+  accessories?: string;
+  features?: string;
+  damages?: string;
+  packaging?: string;
+  shippingMethod?: string;
 }
 
 export type FormStep = keyof ProductInfo;
@@ -23,6 +23,22 @@ export const ConditionOptions = [
   'やや傷や汚れあり',
   '傷や汚れあり',
   '全体的に状態が悪い'
+];
+
+export const FORM_STEPS: FormStep[] = [
+  'productName',
+  'category',
+  'brand',
+  'condition',
+  'purchaseDate',
+  'usageFrequency',
+  'size',
+  'color',
+  'accessories',
+  'features',
+  'damages',
+  'packaging',
+  'shippingMethod',
 ];
 
 export interface UserSettings {

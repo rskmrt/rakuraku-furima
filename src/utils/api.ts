@@ -1,20 +1,5 @@
 import OpenAI from 'openai';
-
-interface ProductInfo {
-  productName: string;
-  category: string;
-  brand?: string;
-  condition?: string;
-  purchaseDate?: string;
-  usageFrequency?: string;
-  size?: string;
-  color?: string;
-  accessories?: string;
-  features?: string;
-  damages?: string;
-  packaging?: string;
-  shippingMethod?: string;
-}
+import { ProductInfo } from '../types';
 
 export async function generateDescription(productInfo: ProductInfo, apiKey: string): Promise<string> {
   if (!apiKey) {
@@ -54,10 +39,27 @@ export async function generateDescription(productInfo: ProductInfo, apiKey: stri
       max_tokens: 1000,
     });
 
-    return response.choices[0]?.message?.content || '説明文の生成に失敗しました。';
+    const generatedText = response.choices[0]?.message?.content;
+    if (!generatedText) {
+      throw new Error('説明文の生成に失敗しました。APIからの応答が空です。');
+    }
+    
+    return generatedText;
   } catch (error) {
-    console.error('OpenAI APIエラー:', error);
-    throw new Error('説明文の生成中にエラーが発生しました。APIキーが正しいか確認してください。');
+    if (error instanceof Error) {
+      console.error('OpenAI APIエラー:', error.message);
+      
+      // APIキーエラーの場合は専用のメッセージを返す
+      if (error.message.includes('API key')) {
+        throw new Error('APIキーが無効です。正しいAPIキーを設定してください。');
+      }
+      
+      throw error;
+    }
+    
+    // 未知のエラーの場合
+    console.error('OpenAI API未知のエラー:', error);
+    throw new Error('説明文の生成中に予期せぬエラーが発生しました。');
   }
 }
 
