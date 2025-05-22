@@ -7,13 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="メルカリの商品説明文を簡単に自動生成できるツール" />
     <meta name="theme-color" content="#FF0211" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
-    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="manifest.json">
     <title>メルカリ説明文ジェネレーター</title>
     <script>
       // 404ページからのリダイレクトをサポート
       (function() {
-        if (typeof window.sessionStorage !== 'undefined') {
+        if (typeof window.sessionStorage !== 'undefined' && window.location.pathname !== '/') {
           // 現在のURLをセッションストレージに保存
           sessionStorage.redirect = location.href;
         }
@@ -23,5 +25,11 @@
   <body>
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
+    <noscript>
+      <div style="padding: 2rem; text-align: center;">
+        <h1>JavaScriptを有効にしてください</h1>
+        <p>このアプリケーションを利用するには、ブラウザのJavaScriptを有効にする必要があります。</p>
+      </div>
+    </noscript>
   </body>
 </html>

@@ -3,42 +3,93 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # mainブランチへのプッシュで実行
+      - main # メインブランチへのプッシュで実行
+  workflow_dispatch: # 手動実行も可能
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18"
+          cache: "npm"
 
       - name: Install Dependencies
         run: npm ci
 
       - name: Build
         run: npm run build
+        env:
+          NODE_ENV: production
 
       - name: Copy additional files
         run: |
           cp -r public/* dist/
-          touch dist/.nojekyll  # Jekyll処理を無効化
+          touch dist/.nojekyll
 
-      - name: Create _headers file
+      - name: Create headers file
         run: |
-          echo "/*" > dist/_headers
-          echo "  Content-Type: application/javascript" >> dist/_headers
-          echo "/manifest.json" >> dist/_headers
-          echo "  Content-Type: application/json" >> dist/_headers
-          echo "/assets/*.js" >> dist/_headers
-          echo "  Content-Type: application/javascript" >> dist/_headers
+          echo '/*' > dist/_headers
+          echo '  Access-Control-Allow-Origin: *' >> dist/_headers
+          echo '  X-Frame-Options: DENY' >> dist/_headers
+          echo '  X-Content-Type-Options: nosniff' >> dist/_headers
+          echo '  X-XSS-Protection: 1; mode=block' >> dist/_headers
+          echo '  Referrer-Policy: strict-origin-when-cross-origin' >> dist/_headers
+          echo '  Permissions-Policy: camera=(), microphone=(), geolocation=()' >> dist/_headers
+          echo '' >> dist/_headers
+          echo '/*.html' >> dist/_headers
+          echo '  Content-Type: text/html; charset=utf-8' >> dist/_headers
+          echo '  Cache-Control: public, max-age=0, must-revalidate' >> dist/_headers
+          echo '' >> dist/_headers
+          echo '/*.js' >> dist/_headers
+          echo '  Content-Type: application/javascript; charset=utf-8' >> dist/_headers
+          echo '  Cache-Control: public, max-age=31536000, immutable' >> dist/_headers
+          echo '' >> dist/_headers
+          echo '/assets/*.js' >> dist/_headers
+          echo '  Content-Type: application/javascript; charset=utf-8' >> dist/_headers
+          echo '  Cache-Control: public, max-age=31536000, immutable' >> dist/_headers
+          echo '' >> dist/_headers
+          echo '/*.json' >> dist/_headers
+          echo '  Content-Type: application/json; charset=utf-8' >> dist/_headers
+          echo '  Cache-Control: public, max-age=0, must-revalidate' >> dist/_headers
+          echo '' >> dist/_headers
+          echo '/manifest.json' >> dist/_headers
+          echo '  Content-Type: application/json; charset=utf-8' >> dist/_headers
+          echo '  Cache-Control: public, max-age=0, must-revalidate' >> dist/_headers
+          echo '' >> dist/_headers
+          echo '/*.css' >> dist/_headers
+          echo '  Content-Type: text/css; charset=utf-8' >> dist/_headers
+          echo '  Cache-Control: public, max-age=31536000, immutable' >> dist/_headers
+          echo '' >> dist/_headers
+          echo '/*.svg' >> dist/_headers
+          echo '  Content-Type: image/svg+xml' >> dist/_headers
+          echo '  Cache-Control: public, max-age=31536000, immutable' >> dist/_headers
+          echo '' >> dist/_headers
+          echo '/*.png' >> dist/_headers
+          echo '  Content-Type: image/png' >> dist/_headers
+          echo '  Cache-Control: public, max-age=31536000, immutable' >> dist/_headers
+
+      - name: Setup Git Identity
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # デプロイするフォルダ
-          branch: gh-pages # デプロイ先のブランチ
+          folder: dist
+          branch: gh-pages
+          clean: true
+          single-commit: true
+          commit-message: "Deploy website - ${{ github.sha }}"
