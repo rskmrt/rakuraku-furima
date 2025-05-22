@@ -1,0 +1,9 @@
+/*
+  Content-Type: application/javascript
+/manifest.json
+  Content-Type: application/json
+/assets/*.js
+  Content-Type: application/javascript
+/src/*.tsx
+  Content-Type: application/javascript
+``` 

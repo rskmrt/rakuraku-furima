@@ -1,26 +1,46 @@
 #!/bin/bash
 
-# Create a temporary directory
+# ビルド実行
+npm run build
+
+# 必要なファイルをdistディレクトリにコピー
+cp -r public/* dist/
+
+# _headersファイルの作成 (MIMEタイプ設定)
+echo "/*" > dist/_headers
+echo "  Content-Type: application/javascript" >> dist/_headers
+echo "/manifest.json" >> dist/_headers
+echo "  Content-Type: application/json" >> dist/_headers
+echo "/assets/*.js" >> dist/_headers
+echo "  Content-Type: application/javascript" >> dist/_headers
+echo "/src/*.tsx" >> dist/_headers
+echo "  Content-Type: application/javascript" >> dist/_headers
+
+# .nojekyllファイルを作成してJekyllの処理を無効化
+touch dist/.nojekyll
+
+# 一時ディレクトリの作成
 TEMP_DIR=$(mktemp -d)
-echo "Created temporary directory: $TEMP_DIR"
+echo "一時ディレクトリを作成しました: $TEMP_DIR"
 
-# Copy dist contents to temporary directory
+# distの内容を一時ディレクトリにコピー
 cp -r dist/* $TEMP_DIR/
-echo "Copied dist contents to temporary directory"
+cp -r dist/.* $TEMP_DIR/ 2>/dev/null || :
+echo "distの内容を一時ディレクトリにコピーしました"
 
-# Initialize git in the temporary directory
+# 一時ディレクトリでGitを初期化
 cd $TEMP_DIR
 git init
 git add .
-git commit -m "Deploy to GitHub Pages"
+git commit -m "GitHub Pagesへデプロイ"
 
-# Add the remote repository
+# リモートリポジトリの追加
 git remote add origin git@github.com:rskmrt/rakuraku-furima.git
 
-# Force push to gh-pages branch
+# gh-pagesブランチに強制プッシュ
 git push -f origin master:gh-pages
 
-# Clean up
+# クリーンアップ
 cd ..
 rm -rf $TEMP_DIR
-echo "Deployment complete" 
+echo "デプロイ完了" 
