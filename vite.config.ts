@@ -35,7 +35,7 @@ export default defineConfig({
       }
     })
   ],
-  base: '',
+  base: './',
   build: {
     assetsInlineLimit: 0,
     outDir: 'dist',
@@ -50,5 +50,10 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['lucide-react'],
+  },
+  server: {
+    headers: {
+      'Content-Type': 'application/javascript'
+    }
   }
 });
